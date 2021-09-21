@@ -402,11 +402,9 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
     } catch (CameraAccessException e) {
       onErrorCallback.onError("cameraAccess", e.getMessage());
     } catch (NullPointerException e) {
-      dartMessenger.error(flutterResult, "cameraAccess", e.getMessage(), null);
-      return;
+      onErrorCallback.onError("nullPonter", e.getMessage());
     } catch (IllegalStateException e) {
-      dartMessenger.error(flutterResult, "cameraAccess", e.getMessage(), null);
-      return;
+      onErrorCallback.onError("illegalState", e.getMessage());
     }
   }
 
@@ -471,11 +469,9 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
     } catch (CameraAccessException e) {
       e.printStackTrace();
     } catch (NullPointerException e) {
-      dartMessenger.error(flutterResult, "cameraAccess", e.getMessage(), null);
-      return;
+      e.printStackTrace();
     } catch (IllegalStateException e) {
-      dartMessenger.error(flutterResult, "cameraAccess", e.getMessage(), null);
-      return;
+      e.printStackTrace();
     }
   }
 
@@ -498,10 +494,10 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
       dartMessenger.error(flutterResult, "cameraAccess", e.getMessage(), null);
       return;
     } catch (NullPointerException e) {
-      dartMessenger.error(flutterResult, "cameraAccess", e.getMessage(), null);
+      dartMessenger.error(flutterResult, "nullPointer", e.getMessage(), null);
       return;
     } catch (IllegalStateException e) {
-      dartMessenger.error(flutterResult, "cameraAccess", e.getMessage(), null);
+      dartMessenger.error(flutterResult, "illegalState", e.getMessage(), null);
       return;
     }
     stillBuilder.addTarget(pictureImageReader.getSurface());
