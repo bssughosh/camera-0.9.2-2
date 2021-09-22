@@ -241,7 +241,7 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
               resolutionFeature.getPreviewSize().getHeight(), cameraFeatures.getExposureLock().getValue(),
               cameraFeatures.getAutoFocus().getValue(), cameraFeatures.getExposurePoint().checkIsSupported(),
               cameraFeatures.getFocusPoint().checkIsSupported());
-        } catch (CameraAccessException e) {
+        } catch (CameraAccessException | IllegalStateException | NullPointerException e) {
           dartMessenger.sendCameraErrorEvent(e.getMessage());
           close();
         }
@@ -528,7 +528,7 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
       captureSession.abortCaptures();
       Log.i(TAG, "sending capture request");
       captureSession.capture(stillBuilder.build(), captureCallback, backgroundHandler);
-    } catch (CameraAccessException e) {
+    } catch (CameraAccessException | IllegalStateException | NullPointerException e) {
       dartMessenger.error(flutterResult, "cameraAccess", e.getMessage(), null);
     }
   }
@@ -585,7 +585,7 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
 
     try {
       captureSession.capture(previewRequestBuilder.build(), null, backgroundHandler);
-    } catch (CameraAccessException e) {
+    } catch (CameraAccessException | IllegalStateException | NullPointerException e) {
       dartMessenger.sendCameraErrorEvent(e.getMessage());
     }
   }
@@ -606,7 +606,7 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
       previewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_IDLE);
 
       captureSession.capture(previewRequestBuilder.build(), null, backgroundHandler);
-    } catch (CameraAccessException e) {
+    } catch (CameraAccessException | IllegalStateException | NullPointerException e) {
       dartMessenger.sendCameraErrorEvent(e.getMessage());
       return;
     }
@@ -637,7 +637,7 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
     try {
       createCaptureSession(CameraDevice.TEMPLATE_RECORD, () -> mediaRecorder.start(), mediaRecorder.getSurface());
       result.success(null);
-    } catch (CameraAccessException e) {
+    } catch (CameraAccessException | IllegalStateException | NullPointerException e) {
       recordingVideo = false;
       captureFile = null;
       result.error("videoRecordingFailed", e.getMessage(), null);
@@ -655,14 +655,14 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
     try {
       captureSession.abortCaptures();
       mediaRecorder.stop();
-    } catch (CameraAccessException | IllegalStateException e) {
+    } catch (CameraAccessException | IllegalStateException | NullPointerException e) {
       // Ignore exceptions and try to continue (changes are camera session already
       // aborted capture).
     }
     mediaRecorder.reset();
     try {
       startPreview();
-    } catch (CameraAccessException | IllegalStateException e) {
+    } catch (CameraAccessException | IllegalStateException | NullPointerException e) {
       result.error("videoRecordingFailed", e.getMessage(), null);
       return;
     }
@@ -683,7 +683,7 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
         result.error("videoRecordingFailed", "pauseVideoRecording requires Android API +24.", null);
         return;
       }
-    } catch (IllegalStateException e) {
+    } catch (IllegalStateException | NullPointerException e) {
       result.error("videoRecordingFailed", e.getMessage(), null);
       return;
     }
@@ -704,7 +704,7 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
         result.error("videoRecordingFailed", "resumeVideoRecording requires Android API +24.", null);
         return;
       }
-    } catch (IllegalStateException e) {
+    } catch (IllegalStateException | NullPointerException e) {
       result.error("videoRecordingFailed", e.getMessage(), null);
       return;
     }
