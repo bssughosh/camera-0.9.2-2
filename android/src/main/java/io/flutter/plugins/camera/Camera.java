@@ -466,11 +466,7 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
       // Trigger one capture to start AE sequence.
       captureSession.capture(previewRequestBuilder.build(), cameraCaptureCallback, backgroundHandler);
 
-    } catch (CameraAccessException e) {
-      e.printStackTrace();
-    } catch (NullPointerException e) {
-      e.printStackTrace();
-    } catch (IllegalStateException e) {
+    } catch (CameraAccessException | NullPointerException | IllegalStateException e) {
       e.printStackTrace();
     }
   }
