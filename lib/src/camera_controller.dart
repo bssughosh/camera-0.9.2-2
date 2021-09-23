@@ -105,7 +105,10 @@ class CameraValue {
   /// Convenience getter for `previewSize.width / previewSize.height`.
   ///
   /// Can only be called when [initialize] is done.
-  double get aspectRatio => previewSize!.width / previewSize!.height;
+  double get aspectRatio {
+    if (previewSize == null) return 1;
+    return previewSize!.width / previewSize!.height;
+  }
 
   /// Whether the controller is in an error state.
   ///
