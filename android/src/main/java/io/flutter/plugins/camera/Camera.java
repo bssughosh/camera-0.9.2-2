@@ -615,12 +615,15 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
     final File outputDir = applicationContext.getCacheDir();
     try {
       captureFile = File.createTempFile("REC", ".mp4", outputDir);
+      System.out.println('Created temp file');
     } catch (IOException | SecurityException e) {
       result.error("cannotCreateFile", e.getMessage(), null);
       return;
     }
     try {
+      System.out.println('Preparing Media Recorder');
       prepareMediaRecorder(captureFile.getAbsolutePath());
+      System.out.println('Prepared Media Recorder');
     } catch (IOException e) {
       recordingVideo = false;
       captureFile = null;
@@ -628,10 +631,15 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
       return;
     }
     // Re-create autofocus feature so it's using video focus mode now.
+    System.out.println('Setting Auto focus');
+
     cameraFeatures.setAutoFocus(cameraFeatureFactory.createAutoFocusFeature(cameraProperties, true));
+    System.out.println('Auto focus set');
     recordingVideo = true;
     try {
+      System.out.println('Create Capture Session');
       createCaptureSession(CameraDevice.TEMPLATE_RECORD, () -> mediaRecorder.start(), mediaRecorder.getSurface());
+      System.out.println('CreateCaptureSession Done');
       result.success(null);
     } catch (CameraAccessException | IllegalStateException | NullPointerException e) {
       recordingVideo = false;
@@ -645,19 +653,33 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
       result.success(null);
       return;
     }
+
+    System.out.println('Setting Auto focus');
+
     // Re-create autofocus feature so it's using continuous capture focus mode now.
     cameraFeatures.setAutoFocus(cameraFeatureFactory.createAutoFocusFeature(cameraProperties, false));
+    System.out.println('Auto focus set');
+
     recordingVideo = false;
     try {
       captureSession.abortCaptures();
+      System.out.println('Aborting captures');
+
       mediaRecorder.stop();
+      System.out.println('Media Recorder Stopped');
+
     } catch (CameraAccessException | IllegalStateException | NullPointerException e) {
       // Ignore exceptions and try to continue (changes are camera session already
       // aborted capture).
     }
     mediaRecorder.reset();
+    System.out.println('Media Recorder reset');
+
+
     try {
       startPreview();
+      System.out.println('Started preview');
+
     } catch (CameraAccessException | IllegalStateException | NullPointerException e) {
       result.error("videoRecordingFailed", e.getMessage(), null);
       return;
