@@ -615,15 +615,18 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
     final File outputDir = applicationContext.getCacheDir();
     try {
       captureFile = File.createTempFile("REC", ".mp4", outputDir);
-      System.out.println('Created temp file');
+      Log.i(TAG, "Created temp file on start video recording");
     } catch (IOException | SecurityException e) {
       result.error("cannotCreateFile", e.getMessage(), null);
       return;
     }
     try {
-      System.out.println('Preparing Media Recorder');
+      Log.i(TAG, "Preparing Media Recorder");
+
       prepareMediaRecorder(captureFile.getAbsolutePath());
-      System.out.println('Prepared Media Recorder');
+
+      Log.i(TAG, "Prepared Media Recorder");
+
     } catch (IOException e) {
       recordingVideo = false;
       captureFile = null;
@@ -631,15 +634,21 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
       return;
     }
     // Re-create autofocus feature so it's using video focus mode now.
-    System.out.println('Setting Auto focus');
+    Log.i(TAG, "Setting AutoFocus");
+
 
     cameraFeatures.setAutoFocus(cameraFeatureFactory.createAutoFocusFeature(cameraProperties, true));
-    System.out.println('Auto focus set');
+
+    Log.i(TAG, "Auto focus set");
+
     recordingVideo = true;
     try {
-      System.out.println('Create Capture Session');
+      Log.i(TAG, "Create Capture Session");
+
       createCaptureSession(CameraDevice.TEMPLATE_RECORD, () -> mediaRecorder.start(), mediaRecorder.getSurface());
-      System.out.println('CreateCaptureSession Done');
+
+      Log.i(TAG, "Create Capture session done");
+
       result.success(null);
     } catch (CameraAccessException | IllegalStateException | NullPointerException e) {
       recordingVideo = false;
@@ -654,31 +663,53 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
       return;
     }
 
-    System.out.println('Setting Auto focus');
+    Log.i(TAG, "Setting auto focus");
 
     // Re-create autofocus feature so it's using continuous capture focus mode now.
     cameraFeatures.setAutoFocus(cameraFeatureFactory.createAutoFocusFeature(cameraProperties, false));
-    System.out.println('Auto focus set');
+
+    Log.i(TAG, "Auto focus set");
+
 
     recordingVideo = false;
+
     try {
+
+      Log.i(TAG, "Aborting captures");
+
       captureSession.abortCaptures();
-      System.out.println('Aborting captures');
+
+      Log.i(TAG, "Aborting captures done");
+
+
+      Log.i(TAG, "media recorder stop");
 
       mediaRecorder.stop();
-      System.out.println('Media Recorder Stopped');
+
+      Log.i(TAG, "Media Recoreder STopped");
+
 
     } catch (CameraAccessException | IllegalStateException | NullPointerException e) {
       // Ignore exceptions and try to continue (changes are camera session already
       // aborted capture).
     }
+
+    Log.i(TAG, "Resetting media recorder");
+
     mediaRecorder.reset();
-    System.out.println('Media Recorder reset');
+
+    Log.i(TAG, "Media recorder resert");
+
 
 
     try {
+
+      Log.i(TAG, "start preview");
+
       startPreview();
-      System.out.println('Started preview');
+
+      Log.i(TAG, "Start preview done");
+
 
     } catch (CameraAccessException | IllegalStateException | NullPointerException e) {
       result.error("videoRecordingFailed", e.getMessage(), null);
