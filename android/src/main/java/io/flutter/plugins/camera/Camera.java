@@ -535,7 +535,7 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
   }
 
   /** Starts a background thread and its {@link Handler}. */
-  // @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+  @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
   public void startBackgroundThread() {
     backgroundHandlerThread = new HandlerThread("CameraBackground");
     try {
@@ -547,7 +547,7 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
   }
 
   /** Stops the background thread and its {@link Handler}. */
-  // @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+  @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
   public void stopBackgroundThread() {
     if (backgroundHandlerThread != null) {
       try {
