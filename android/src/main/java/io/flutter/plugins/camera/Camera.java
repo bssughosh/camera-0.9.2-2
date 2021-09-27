@@ -615,17 +615,17 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
     final File outputDir = applicationContext.getCacheDir();
     try {
       captureFile = File.createTempFile("REC", ".mp4", outputDir);
-      Log.i(TAG, "Created temp file on start video recording");
+      Log.d(TAG, "Created temp file on start video recording");
     } catch (IOException | SecurityException e) {
       result.error("cannotCreateFile", e.getMessage(), null);
       return;
     }
     try {
-      Log.i(TAG, "Preparing Media Recorder");
+      Log.d(TAG, "Preparing Media Recorder");
 
       prepareMediaRecorder(captureFile.getAbsolutePath());
 
-      Log.i(TAG, "Prepared Media Recorder");
+      Log.d(TAG, "Prepared Media Recorder");
 
     } catch (IOException e) {
       recordingVideo = false;
@@ -634,20 +634,20 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
       return;
     }
     // Re-create autofocus feature so it's using video focus mode now.
-    Log.i(TAG, "Setting AutoFocus");
+    Log.d(TAG, "Setting AutoFocus");
 
 
     cameraFeatures.setAutoFocus(cameraFeatureFactory.createAutoFocusFeature(cameraProperties, true));
 
-    Log.i(TAG, "Auto focus set");
+    Log.d(TAG, "Auto focus set");
 
     recordingVideo = true;
     try {
-      Log.i(TAG, "Create Capture Session");
+      Log.d(TAG, "Create Capture Session");
 
       createCaptureSession(CameraDevice.TEMPLATE_RECORD, () -> mediaRecorder.start(), mediaRecorder.getSurface());
 
-      Log.i(TAG, "Create Capture session done");
+      Log.d(TAG, "Create Capture session done");
 
       result.success(null);
     } catch (CameraAccessException | IllegalStateException | NullPointerException e) {
@@ -663,30 +663,30 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
       return;
     }
 
-    Log.i(TAG, "Setting auto focus");
+    Log.d(TAG, "Setting auto focus");
 
     // Re-create autofocus feature so it's using continuous capture focus mode now.
     cameraFeatures.setAutoFocus(cameraFeatureFactory.createAutoFocusFeature(cameraProperties, false));
 
-    Log.i(TAG, "Auto focus set");
+    Log.d(TAG, "Auto focus set");
 
 
     recordingVideo = false;
 
     try {
 
-      Log.i(TAG, "Aborting captures");
+      Log.d(TAG, "Aborting captures");
 
       captureSession.abortCaptures();
 
-      Log.i(TAG, "Aborting captures done");
+      Log.d(TAG, "Aborting captures done");
 
 
-      Log.i(TAG, "media recorder stop");
+      Log.d(TAG, "media recorder stop");
 
       mediaRecorder.stop();
 
-      Log.i(TAG, "Media Recoreder STopped");
+      Log.d(TAG, "Media Recoreder STopped");
 
 
     } catch (CameraAccessException | IllegalStateException | NullPointerException e) {
@@ -694,21 +694,21 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
       // aborted capture).
     }
 
-    Log.i(TAG, "Resetting media recorder");
+    Log.d(TAG, "Resetting media recorder");
 
     mediaRecorder.reset();
 
-    Log.i(TAG, "Media recorder resert");
+    Log.d(TAG, "Media recorder resert");
 
 
 
     try {
 
-      Log.i(TAG, "start preview");
+      Log.d(TAG, "start preview");
 
       startPreview();
 
-      Log.i(TAG, "Start preview done");
+      Log.d(TAG, "Start preview done");
 
 
     } catch (CameraAccessException | IllegalStateException | NullPointerException e) {
