@@ -190,7 +190,9 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
     Log.i(TAG, "prepareMediaRecorder");
 
     if (mediaRecorder != null) {
+      mediaRecorder.reset();
       mediaRecorder.release();
+      mediaRecorder = null;
     }
 
     final PlatformChannel.DeviceOrientation lockedOrientation = ((SensorOrientationFeature) cameraFeatures
@@ -695,10 +697,9 @@ class Camera implements CameraCaptureCallback.CameraCaptureStateListener, ImageR
     }
 
     Log.d(TAG, "Resetting media recorder");
-
     mediaRecorder.reset();
 
-    Log.d(TAG, "Media recorder resert");
+    Log.d(TAG, "Media recorder reset");
 
 
 
